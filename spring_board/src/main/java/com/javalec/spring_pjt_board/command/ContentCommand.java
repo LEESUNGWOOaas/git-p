@@ -23,6 +23,7 @@ public class ContentCommand implements Command {
 		//dao작업후 컨텐츠에 내용응 Dto에서 뿌려줌
 		Dto dto = dao.contentView();
 		
+		//model에 dto로 온걸 content_view에서 뿌려줘야대서 가져온다 
 		model.addAttribute("content_view",dto);
 	}
 
