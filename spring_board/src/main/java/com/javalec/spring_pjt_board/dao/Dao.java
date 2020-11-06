@@ -17,7 +17,9 @@ public class Dao {
 
 DataSource dataSource;
 
-public Dto contentView() {
+public Dto contentView(String bId) {//아이디값을 가져와서 해당 컨텐츠 게시물을 가져올수 있다
+	
+	
 	return null;
 }
 	public void write(String bName,String bTitle,String bContent) { //writeCommand에서 역할을 전달해서 수행할 함수 생성 그후 writeCommand에 dao객체에 보내는 값의 형식과 이름을 같이 써준다 
