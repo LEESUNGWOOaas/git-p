@@ -17,10 +17,56 @@ public class Dao {
 
 DataSource dataSource;
 
-public Dto contentView(String bId) {//아이디값을 가져와서 해당 컨텐츠 게시물을 가져올수 있다
+public Dto contentView(String strId) {//아이디값을 가져와서 해당 컨텐츠 게시물을 가져올수 있다 id의 중복이 있을것을 대비해 strid로 변경
+
+	//컨텐츠의 조회수를 담당하는 코드 
+	upHit(strId	);
 	
 	
-	return null;
+	Dto dto = null;
+	Connection connection = null;
+	PreparedStatement preparedStatement = null;
+	ResultSet resultSet = null;//결과물 같고 view에 뿌리기때문에 필요
+	
+	try {
+		 	connection = dataSource.getConnection();
+		 	
+		 	String query = "select * from mvc_board where bId=?";
+		 	preparedStatement = connection.prepareStatement(query);
+		 	preparedStatement.setInt(1,Integer.parseInt(strId));//bId는 dto단에서 int형으로 받기 때문에 캐스팅
+		 	resultSet=preparedStatement.executeQuery();
+		 	
+		 	if(resultSet.next()) {
+		 		int bId=resultSet.getInt("bId");
+		 		String bName = resultSet.getString("bName");
+		 		String bTitle = resultSet.getString("bTitle");
+		 		String bContent = resultSet.getString("bContent");
+		 		Timestamp bDate = resultSet.getTimestamp("bDate");
+		 		int bHit = resultSet.getInt("bHit");
+		 		int bGroup = resultSet.getInt("bGroup");
+		 		int bStep = resultSet.getInt("bStep");
+		 		int bIndent = resultSet.getInt("bIndent");
+		 		
+		 		//dto에 데이터 담기
+		 		dto = new Dto(bId, bName, bTitle, bContent, bDate, bHit, bGroup, bStep, bIndent);
+		 	
+		 	}
+	} catch (Exception e) {
+		// TODO: handle exception
+		e.printStackTrace();
+	}finally {
+		try {
+			if(resultSet!=null)resultSet.close();
+			if(preparedStatement!=null)preparedStatement.close();
+			if(connection!=null)connection.close();
+		} catch (Exception e2) {
+			// TODO: handle exception
+			
+		}
+	}
+	
+	
+	return dto;
 }
 	public void write(String bName,String bTitle,String bContent) { //writeCommand에서 역할을 전달해서 수행할 함수 생성 그후 writeCommand에 dao객체에 보내는 값의 형식과 이름을 같이 써준다 
 		//데이터 베이스에 접근해서 글을 입력
@@ -101,11 +147,37 @@ public Dto contentView(String bId) {//아이디값을 가져와서 해당 컨텐츠 게시물을 �
 			if(preparedStatement != null)preparedStatement.close();
 			if(connection != null)connection.close();
 			}catch(Exception e2){
-				 
+				 e2.printStackTrace();
 			}
 			
 		}
 		
 		return dtos; //작업결과물을 dto로 넘겨줌 
 	}
+
+		private void upHit(String bId) {
+			//TODO Auto-generated method stub
+			Connection connection = null;
+			PreparedStatement preparedStatement = null;
+			
+			try {
+				connection = dataSource.getConnection();
+				String query = "update mvc_board set bHit = bHit + 1 where bId = ?";
+				preparedStatement = connection.prepareStatement(query);
+				preparedStatement.setString(1,bId);
+				
+				int rn = preparedStatement.executeUpdate();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}finally {
+				try {
+					if(preparedStatement != null)preparedStatement.close();
+					if(connection != null)connection.close();
+				} catch (Exception e2) {
+					// TODO: handle exception
+					e2.printStackTrace();
+				}
+			}
+		}
 }
