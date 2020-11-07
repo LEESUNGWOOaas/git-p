@@ -17,10 +17,10 @@ public class Dao {
 
 DataSource dataSource;
 
-public Dto contentView(String strId) {//아이디값을 가져와서 해당 컨텐츠 게시물을 가져올수 있다 id의 중복이 있을것을 대비해 strid로 변경
+public Dto contentView(String strID) {//아이디값을 가져와서 해당 컨텐츠 게시물을 가져올수 있다 id의 중복이 있을것을 대비해 strid로 변경
 
 	//컨텐츠의 조회수를 담당하는 코드 
-	upHit(strId	);
+	upHit(strID);
 	
 	
 	Dto dto = null;
@@ -33,7 +33,7 @@ public Dto contentView(String strId) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 		 	
 		 	String query = "select * from mvc_board where bId=?";
 		 	preparedStatement = connection.prepareStatement(query);
-		 	preparedStatement.setInt(1,Integer.parseInt(strId));//bId는 dto단에서 int형으로 받기 때문에 캐스팅
+		 	preparedStatement.setInt(1,Integer.parseInt(strID));//bId는 dto단에서 int형으로 받기 때문에 캐스팅
 		 	resultSet=preparedStatement.executeQuery();
 		 	
 		 	if(resultSet.next()) {
@@ -61,7 +61,7 @@ public Dto contentView(String strId) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 			if(connection!=null)connection.close();
 		} catch (Exception e2) {
 			// TODO: handle exception
-			
+			e2.printStackTrace();
 		}
 	}
 	
@@ -116,6 +116,7 @@ public Dto contentView(String strId) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 		
 		try {
 			connection = dataSource.getConnection();//커넥션 객체를 구함
+			
 			String query = "select bId,bName,bTitle,bContent,bDate,bHit,bGroup,bStep,bIndent from mvc_board order by bGroup desc,bStep asc";
 			preparedStatement = connection.prepareStatement(query);
 			resultSet = preparedStatement.executeQuery();
@@ -128,12 +129,12 @@ public Dto contentView(String strId) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 			 String bContent = resultSet.getString("bContent");
 			 Timestamp bDate = resultSet.getTimestamp("bDate");
 			 int bHit = resultSet.getInt("bHit");
-			 int bStep = resultSet.getInt("bStep");
 			 int bGroup = resultSet.getInt("bGroup");
+			 int bStep = resultSet.getInt("bStep");
 			 int bIndent = resultSet.getInt("bIndent");
 			 
 			 
-			 Dto dto = new Dto (bId, bName, bTitle, bContent, bDate, bHit, bGroup, bStep, bIndent);
+			 Dto dto = new Dto(bId, bName, bTitle, bContent, bDate, bHit, bGroup, bStep, bIndent);
 			 dtos.add(dto);//while 반복문을 통해 계속 돌면서 레코드값을 계속 dto에 담는다
 		 }
 			 
@@ -154,7 +155,40 @@ public Dto contentView(String strId) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 		
 		return dtos; //작업결과물을 dto로 넘겨줌 
 	}
-
+	
+	public void modify(String bId, String bName, String bTitle, String bContent) {//파라미터가 ModifyCommand에 주어졌으니 맞춰준다
+		// TODO Auto-generated method stub
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+	
+		try {
+			
+			connection = dataSource.getConnection();
+			
+			String query = "update mvc_board set bName =? , bTitle = ? , bContent = ? where bId = ?";
+			preparedStatement = connection.prepareStatement(query);
+			
+			preparedStatement.setString(1, bName);
+			preparedStatement.setString(2, bTitle);
+			preparedStatement.setString(3, bContent);
+			preparedStatement.setInt(4,Integer.parseInt(bId));
+			
+			int rn = preparedStatement.executeUpdate();//resultNumber반환형이 정수라 Int 선언 업데이트시 1이 반환
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(preparedStatement!=null)preparedStatement.close();
+				if(connection!=null)connection.close();
+				
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+	}
+	
 		private void upHit(String bId) {
 			//TODO Auto-generated method stub
 			Connection connection = null;

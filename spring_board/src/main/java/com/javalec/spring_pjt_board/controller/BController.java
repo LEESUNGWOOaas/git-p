@@ -50,7 +50,7 @@ public class BController {
 		return"redirect:list";//다시 list로 갈수있게 리다이렉트이동페이지로 생성 
 	}
 	//클릭시 작성내용 컨텐츠 보는 메소드
-	@RequestMapping("content_view")
+	@RequestMapping("/content_view")
 	public String content_view(HttpServletRequest request,Model model) {
 		System.out.println("content_view()");
 		model.addAttribute("request",request);//데이터를 가져오기위해 요청을 함
@@ -62,17 +62,20 @@ public class BController {
 	}
 	
 	
-	@RequestMapping(method=RequestMethod.POST,value="/modify")//수정이 목적이기 때문에 method값을 post방식 value를 추가해줌''으로
+	@RequestMapping(value= "/modify" , method=RequestMethod.POST)//수정이 목적이기 때문에 method값을 post방식 value를 추가해줌''으로
 	public String modify(HttpServletRequest request,Model model) {
+		System.out.println("modify()");
+		
 		model.addAttribute("request",request);
 		command = new ModifyCommand();
 		command.excute(model);
+		
 		
 		return"redirect:list";
 	}
 	
 	
-	@RequestMapping("reply_view")
+	@RequestMapping("/reply_view")
 	public String reply_view(HttpServletRequest request,Model model) {
 		System.out.println("reply_view()");
 		

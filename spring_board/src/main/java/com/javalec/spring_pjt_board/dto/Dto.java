@@ -20,15 +20,15 @@ public class Dto {
 	public Dto(int bId,String bName,String bTitle,String bContent,Timestamp bDate,int bHit,int bGroup,int bStep,int bIndent) {// 생성자를 통해 바로바로 값을 넣을수 있게 파라미터 받음
 		this.bId = bId;
 		this.bName = bName;
+		this.bTitle = bTitle;
 		this.bContent = bContent;
 		this.bDate = bDate;
-		this.bTitle = bTitle;
-		this.bHit = bHit; 
+		this.bHit = bHit;
 		this.bGroup = bGroup;
 		this.bStep = bStep;
 		this.bIndent = bIndent;
 	}
-
+	
 	public int getbId() {
 		return bId;
 	}
@@ -52,7 +52,6 @@ public class Dto {
 	public void setbTitle(String bTitle) {
 		this.bTitle = bTitle;
 	}
-
 
 	public String getbContent() {
 		return bContent;
@@ -78,20 +77,20 @@ public class Dto {
 		this.bHit = bHit;
 	}
 
-	public int getbStep() {
-		return bStep;
-	}
-
-	public void setbStep(int bStep) {
-		this.bStep = bStep;
-	}
-
 	public int getbGroup() {
 		return bGroup;
 	}
 
 	public void setbGroup(int bGroup) {
 		this.bGroup = bGroup;
+	}
+
+	public int getbStep() {
+		return bStep;
+	}
+
+	public void setbStep(int bStep) {
+		this.bStep = bStep;
 	}
 
 	public int getbIndent() {
@@ -101,5 +100,5 @@ public class Dto {
 	public void setbIndent(int bIndent) {
 		this.bIndent = bIndent;
 	}
-
+	
 }
