@@ -8,14 +8,28 @@ import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.javalec.spring_pjt_board.dto.Dto;
 
 public class Dao {
+	
+DataSource dataSource; // 데이터소스
 
-DataSource dataSource;
+public Dao() {//Dao 생성자  생성되는 순간 일을 진행하기 위해 전역변수로 생성
+		
+		try {
+			Context context = new InitialContext();
+			dataSource = (DataSource) context.lookup("java:comp/env/jdbc/xe");
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+		
+	}
+	
+
+	
+
 
 public Dto contentView(String strID) {//아이디값을 가져와서 해당 컨텐츠 게시물을 가져올수 있다 id의 중복이 있을것을 대비해 strid로 변경
 
@@ -24,19 +38,22 @@ public Dto contentView(String strID) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 	
 	
 	Dto dto = null;
+	
 	Connection connection = null;
 	PreparedStatement preparedStatement = null;
 	ResultSet resultSet = null;//결과물 같고 view에 뿌리기때문에 필요
 	
+	//데이터베이스를 접근하기떄문에
 	try {
 		 	connection = dataSource.getConnection();
 		 	
 		 	String query = "select * from mvc_board where bId=?";
 		 	preparedStatement = connection.prepareStatement(query);
+		 	
 		 	preparedStatement.setInt(1,Integer.parseInt(strID));//bId는 dto단에서 int형으로 받기 때문에 캐스팅
 		 	resultSet=preparedStatement.executeQuery();
 		 	
-		 	if(resultSet.next()) {
+		 	if(resultSet.next()) {//만약 (resultSet이 있다면) 
 		 		int bId=resultSet.getInt("bId");
 		 		String bName = resultSet.getString("bName");
 		 		String bTitle = resultSet.getString("bTitle");
@@ -83,6 +100,7 @@ public Dto contentView(String strID) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 		
 			//업데이트 명령
 			int rn = preparedStatement.executeUpdate();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			
@@ -97,16 +115,6 @@ public Dto contentView(String strID) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 		}
 		
 	}
-		public Dao() {
-		
-		try {
-			Context context = new InitialContext();
-			dataSource = (DataSource) context.lookup("java:comp/env/jdbc/xe");
-		} catch (NamingException e) {			
-			e.printStackTrace();
-		}
-		
-	}
 	public ArrayList<Dto> list() {
 		
 		ArrayList<Dto> dtos= new ArrayList<Dto>();//배열 ArrayList로 만듬
@@ -117,7 +125,7 @@ public Dto contentView(String strID) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 		try {
 			connection = dataSource.getConnection();//커넥션 객체를 구함
 			
-			String query = "select bId,bName,bTitle,bContent,bDate,bHit,bGroup,bStep,bIndent from mvc_board order by bGroup desc,bStep asc";
+			String query = "select bId, bName, bTitle, bContent, bDate, bHit, bGroup, bStep, bIndent from mvc_board order by bGroup desc, bStep asc";
 			preparedStatement = connection.prepareStatement(query);
 			resultSet = preparedStatement.executeQuery();
 			
@@ -165,7 +173,7 @@ public Dto contentView(String strID) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 			
 			connection = dataSource.getConnection();
 			
-			String query = "update mvc_board set bName =? , bTitle = ? , bContent = ? where bId = ?";
+			String query = "update mvc_board set bName = ? , bTitle = ? , bContent = ? where bId = ?";
 			preparedStatement = connection.prepareStatement(query);
 			
 			preparedStatement.setString(1, bName);
@@ -173,20 +181,47 @@ public Dto contentView(String strID) {//아이디값을 가져와서 해당 컨텐츠 게시물을
 			preparedStatement.setString(3, bContent);
 			preparedStatement.setInt(4,Integer.parseInt(bId));
 			
-			int rn = preparedStatement.executeUpdate();//resultNumber반환형이 정수라 Int 선언 업데이트시 1이 반환
+			int rn = preparedStatement.executeUpdate();//execute 반환형이 정수라 Int 선언 업데이트시 1이 반환
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			try {
-				if(preparedStatement!=null)preparedStatement.close();
-				if(connection!=null)connection.close();
+				if(preparedStatement!= null)preparedStatement.close();
+				if(connection!= null)connection.close();
 				
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 		}
 		
+	}
+	
+	public void delete(String strID) {
+	
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		
+		try {
+			connection = dataSource.getConnection();
+			String query = "delete mvc_board where bId =?";
+			preparedStatement = connection.prepareStatement(query);
+			
+			preparedStatement.setInt(1,Integer.parseInt(strID));
+			int rn = preparedStatement.executeUpdate(); // executeUpdate 는 int 형이다
+			
+			
+		} catch (Exception e) {
+		e.printStackTrace();
+		
+		}finally {
+			try {
+				if(preparedStatement !=null )preparedStatement.close();
+				if(connection !=null) connection.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
 	}
 	
 		private void upHit(String bId) {
