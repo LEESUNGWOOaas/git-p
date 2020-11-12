@@ -2,6 +2,8 @@ package com.javalec.spring_pjt_board.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +17,23 @@ import com.javalec.spring_pjt_board.command.ModifyCommand;
 import com.javalec.spring_pjt_board.command.ReplyCommand;
 import com.javalec.spring_pjt_board.command.ReplyViewCommand;
 import com.javalec.spring_pjt_board.command.WriteCommand;
+import com.javalec.spring_pjt_board.util.Constant;
 
 @Controller // 오토스캔에 걸리게 해주는 어노테이션
 
 public class BController {
 	
 	Command command;//필드화
+	
+	public JdbcTemplate template;//jdbc 변수
+	
+	
+	@Autowired//오토스캔으로 객체 생성하여 할당하게하는 어노테이션
+	public void setTemplate(JdbcTemplate template) {
+		this.template = template;
+		Constant.template = this.template; //어디서나 쓸수있게 static으로 만들어 담아둔 것을 this설정
+	}
+	
 	
 	@RequestMapping("/list")
 	public String list(Model model) {
