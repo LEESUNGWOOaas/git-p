@@ -2,8 +2,6 @@ package com.javalec.spring_pjt_board.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,23 +15,12 @@ import com.javalec.spring_pjt_board.command.ModifyCommand;
 import com.javalec.spring_pjt_board.command.ReplyCommand;
 import com.javalec.spring_pjt_board.command.ReplyViewCommand;
 import com.javalec.spring_pjt_board.command.WriteCommand;
-import com.javalec.spring_pjt_board.util.Constant;
 
 @Controller // 오토스캔에 걸리게 해주는 어노테이션
 
 public class BController {
 	
 	Command command;//필드화
-	
-	public JdbcTemplate template;//jdbc 변수
-	
-	
-	@Autowired//오토스캔으로 객체 생성하여 할당하게하는 어노테이션
-	public void setTemplate(JdbcTemplate template) {
-		this.template = template;
-		Constant.template = this.template; //어디서나 쓸수있게 static으로 만들어 담아둔 것을 this설정
-	}
-	
 	
 	@RequestMapping("/list")
 	public String list(Model model) {
@@ -63,7 +50,7 @@ public class BController {
 		return"redirect:list";//다시 list로 갈수있게 리다이렉트이동페이지로 생성 
 	}
 	//클릭시 작성내용 컨텐츠 보는 메소드
-	@RequestMapping("/content_view")
+	@RequestMapping("content_view")
 	public String content_view(HttpServletRequest request,Model model) {
 		System.out.println("content_view()");
 		model.addAttribute("request",request);//데이터를 가져오기위해 요청을 함
@@ -75,20 +62,17 @@ public class BController {
 	}
 	
 	
-	@RequestMapping(value= "/modify" , method=RequestMethod.POST)//수정이 목적이기 때문에 method값을 post방식 value를 추가해줌''으로
+	@RequestMapping(method=RequestMethod.POST,value="/modify")//수정이 목적이기 때문에 method값을 post방식 value를 추가해줌''으로
 	public String modify(HttpServletRequest request,Model model) {
-		System.out.println("modify()");
-		
 		model.addAttribute("request",request);
 		command = new ModifyCommand();
 		command.excute(model);
-		
 		
 		return"redirect:list";
 	}
 	
 	
-	@RequestMapping("/reply_view")
+	@RequestMapping("reply_view")
 	public String reply_view(HttpServletRequest request,Model model) {
 		System.out.println("reply_view()");
 		

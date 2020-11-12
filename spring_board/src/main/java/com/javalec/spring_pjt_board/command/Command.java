@@ -4,5 +4,5 @@ import org.springframework.ui.Model;
 
 public interface Command {
 
-	public void excute(Model model);
+	void excute(Model model);
 }

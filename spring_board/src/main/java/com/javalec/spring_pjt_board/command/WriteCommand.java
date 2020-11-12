@@ -12,8 +12,6 @@ public class WriteCommand implements Command {
 
 	@Override
 	public void excute(Model model) {
-		// TODO Auto-generated method stub
-
 		//¸ðµ¨À» ¸ÊÇüÅÂ·Î º¯Çü
 		Map<String,Object>map = model.asMap();
 		HttpServletRequest request = (HttpServletRequest) map.get("request");
