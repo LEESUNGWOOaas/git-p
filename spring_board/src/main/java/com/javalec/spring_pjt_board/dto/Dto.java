@@ -3,21 +3,21 @@ package com.javalec.spring_pjt_board.dto;
 import java.sql.Timestamp;
 
 public class Dto {
-	int bId;
-	String bName;
-	String bTitle;
-	String bContent;
-	Timestamp bDate;// dateÇÏÀ§°´Ã¼ÀÇ timestamp¸¦ »ç¿ë (java.sql)
-	int bStep;
-	int bHit;
-	int bGroup;
-	int bIndent;
-
-	public Dto() {// default »ı¼ºÀÚ
+	int bId;//ê²Œì‹œíŒid
+	String bName;//ì‘ì„±ì
+	String bTitle;//ê¸€ì œëª©
+	String bContent;//ë‚´ìš©
+	Timestamp bDate;// Dateí•˜ìœ„ê°ì²´ì˜ timestampë¥¼ ì‚¬ìš© (java.sql)
+	int bHit;	//ì¡°íšŒìˆ˜
+	int bGroup;	//ë‹µê¸€(ë¦¬í”Œ)ì˜ ê·¸ë£¹ë²ˆí˜¸
+	int bStep;	//ê¸€ì´ ìœ„ì—ì„œ ëª‡ë²ˆÂŠì— ìœ„ì¹˜í•œì§€
+	int bIndent; // ë“¤ì—¬ì“°ê¸° ë‹µê¸€ì˜ ìœ„ì¹˜bit ì°¨ì´ë¥¼ ì¤˜ì„œ ê¸€ì´ ë„ì–´ì¨ì§€ëŠ” ê²ƒ
+	
+	public Dto() {// default ìƒì„±ì
 
 	}
 
-	public Dto(int bId,String bName,String bTitle,Timestamp bDate,int bHit,int bGroup,int bIntent, String bContent, int bIndent) {// »ı¼ºÀÚ¸¦ ÅëÇØ ¹Ù·Î¹Ù·Î °ªÀ» ³ÖÀ»¼ö ÀÖ°Ô ÆÄ¶ó¹ÌÅÍ ¹ŞÀ½
+	public Dto(int bId,String bName,String bTitle,Timestamp bDate,int bHit,int bGroup,int bIntent, String bContent, int bIndent) {// ìƒì„±ìë¥¼ í†µí•´ ë°”ë¡œë°”ë¡œ ê°’ì„ ë„£ì„ìˆ˜ ìˆê²Œ íŒŒë¼ë¯¸í„° ë°›ìŒ
 		this.bId = bId;
 		this.bName = bName;
 		this.bDate = bDate;
@@ -82,8 +82,8 @@ public class Dto {
 		return bContent;
 	}
 
-	public void setbContent(String content) {
-		bContent = content;
+	public void setbContent(String bContent) {
+		this.bContent = bContent;
 	}
 
 	public int getbStep() {
