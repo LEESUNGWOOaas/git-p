@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<!-- security 설정 -->
+	<security:http auto-config ="true">
+	<!-- security-url에 들오는 요청중 pattern에 요청이있으면 한번 인터셉터(잡는다)통과는 access의 내용대로  -->
+	<security:intercept-url pattern="/login.html*" access="ROLE_USER"/>
+	<security:intercept-url pattern="/welcome.html*" access="ROLE_ADMIN"/><!-- 관리자 페이지 -->
+	</security:http>
+	
+	<!-- 관리자와 일반회원이사용할수있는 페이지의 차별점을 두는 코드  -->
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+			<!-- 이름이 해당 아이디(유저)이고 비밀번호가 해당사항이면 ROLE_USER만 접근가능 -->
+				<security:user name="user" password="123" authorities="ROLE_USER"/>
+				<!-- 이름이 해당 아이디(관리자)이고 비밀번호가 해당사항이면 모두 패스 -->
+				<security:user name="admin" password="123" authorities="ROLE_ADMIN,ROLE_USER"/>
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+	
+</beans>

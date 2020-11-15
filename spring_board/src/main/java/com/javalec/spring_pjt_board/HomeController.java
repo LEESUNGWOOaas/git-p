@@ -35,5 +35,13 @@ public class HomeController {
 		
 		return "home";
 	}
-	
+	@RequestMapping("/login.html") // 로그인이 되어있으면 통과 
+	public String login(Locale locale, Model model) {
+		
+		return "security/login";
+	}
+	@RequestMapping("/welcome.html") 
+	public String welcome(Locale locale, Model model) {
+		return "security/welcome";
+	}
 }
