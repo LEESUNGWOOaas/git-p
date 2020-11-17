@@ -2,13 +2,9 @@ package com.javalec.spring_pjt_board.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -26,13 +22,6 @@ DataSource dataSource; // 데이터소스
 JdbcTemplate template = null;//jdbc
 
 public Dao() {//Dao 생성자  생성되는 순간 일을 진행하기 위해 전역변수로 생성
-		
-		try {
-			Context context = new InitialContext();
-			dataSource = (DataSource) context.lookup("java:comp/env/jdbc/xe");
-		} catch (Exception e) {			
-			e.printStackTrace();
-		}
 		
 		template = Constant.template;
 	}
